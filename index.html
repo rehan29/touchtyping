@@ -8,14 +8,13 @@
     <meta name="author" content="">
 
     <!-- styles -->
-    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap.min.css" rel="stylesheet">
-    <style> body {padding-top: 60px; } </style>
-    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.1/css/bootstrap-responsive.min.css" rel="stylesheet">
-
-    <!-- scripts -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/2.2.1/bootstrap.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+      <style> 
+          * { font-family: sans-serif; color: white; }
+          body {padding-top: 60px; text-align: center; background-color: #400040; } 
+          input { font-size: 30pt; background-color:  transparent; text-align: center; outline: none; border: 0;}
+          h3 { position: fixed; top: 20px; right: 20px;}
+      </style>
 
   </head>
   <body>
@@ -23,19 +22,22 @@
     <div class="container">
 
       <h1>TouchTyping</h1>
-      <div class="totype"></div>
+      <h3>Lives: <span class="lives">***</span></h3>
+      <h2 class="score">0</h2>
+      <input class="totype" type="text" disabled>
       <br />
-      <input class="typer">
       <br />
-      <button class="check" onclick="check()">Check</button>
+      <input class="typer" type="text" onkeyup="check()" autofocus>
       
 
     </div> <!-- /container -->
 
   </body>
   <script>
+      var score = 1;
+      var incorrect = 0;
     function random(len) {
-      var text = " ";
+      var text = "";
     
       var charset = "abcdefghijklmnopqrstuvwxyz0123456789";
     
@@ -45,19 +47,35 @@
       return text;
     }
 
-    function newtext() {
-      randomstr = random(8);
-      document.querySelector(".totype").innerHTML = randomstr;
-      while (document.querySelector(".typer").value !== randomstr) {}
+    function newletter() {
+      randomstr = random(1);
+      document.querySelector(".totype").value = randomstr;
     }
-
+      
+    function increase() {
+      score++;
+      document.querySelector(".score").value = score;
+    }
+      
     function check() {
-      if (document.querySelector(".typer").value === randomstr) {
-        alert("Correct!");
-        newtext();
+      if (document.querySelector(".typer").value === document.querySelector(".totype").value) {
+        score++;
+        document.querySelector(".score").innerHTML = score;
+        document.querySelector(".typer").value = "";
+        document.body.style.backgroundColor = "#400040";
+        newletter();
+      } else {
+        alert("Try again!");
+        document.querySelector(".typer").value = "";
+        document.body.style.backgroundColor = "#7F0000";
+        incorrect++;
+        if (incorrect === 0) { document.querySelector(".lives").innerHTML = "***"; }
+        if (incorrect === 1) { document.querySelector(".lives").innerHTML = "**"; }
+        if (incorrect === 2) { document.querySelector(".lives").innerHTML = "*"; }
+        if (incorrect === 3) { alert("Game Over! You scored " + score); location.reload() }
       }
     }
-
-    newtext();
+      
+    newletter();
   </script>
 </html>
